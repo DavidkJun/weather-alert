@@ -1,24 +1,30 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
-import { ConfigModule } from './config/config.module';
+import { ConfigSetupModule } from './config/config.module';
 import { ConfigService } from './config/config.service';
 import { ScheduleModule } from '@nestjs/schedule';
 import { UsersModule } from './users/users.module';
 import { MailerModule } from './mailer/mailer.module';
+import { SchedulerModule } from './scheduler/scheduler.module';
+import {ConfigModule} from "@nestjs/config";
 
 @Module({
   imports: [
-    ConfigModule,
+    ConfigSetupModule,
     MongooseModule.forRootAsync({
-      imports: [ConfigModule],
+      imports: [ConfigSetupModule],
       useFactory: (configService: ConfigService) => ({
         uri: configService.get('MONGODB_URI'),
       }),
       inject: [ConfigService],
     }),
+    ConfigModule.forRoot({
+      isGlobal: true, 
+    }),
     ScheduleModule.forRoot(),
     UsersModule,
     MailerModule,
+    SchedulerModule,
   ],
 })
 export class AppModule {}
