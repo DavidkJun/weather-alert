@@ -1,6 +1,6 @@
 import * as dotenv from 'dotenv';
 
-export class ConfigService {
+export class ConfigSetupService {
   constructor() {
     dotenv.config();
   }

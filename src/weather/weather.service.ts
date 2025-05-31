@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
-import { ConfigService } from '../config/config.service';
+import { ConfigSetupService } from '../config/config.service';
 
 @Injectable()
 export class WeatherService {
-  constructor(private readonly configService: ConfigService) {}
+  constructor(private readonly configService: ConfigSetupService) {}
 
   async getForecast(city: string = 'Kyiv') {
     const apiKey = this.configService.get('OPENWEATHER_API_KEY');
