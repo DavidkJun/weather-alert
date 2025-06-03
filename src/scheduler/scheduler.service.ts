@@ -3,6 +3,7 @@ import { Cron } from '@nestjs/schedule';
 import { UsersService } from '../users/users.service';
 import { WeatherService } from '../weather/weather.service';
 import { MailerService } from '../mailer/mailer.service';
+import {NotificationService} from "../notification/notification.service";
 
 @Injectable()
 export class SchedulerService {
@@ -10,6 +11,7 @@ export class SchedulerService {
     private readonly usersService: UsersService,
     private readonly weatherService: WeatherService,
     private readonly mailerService: MailerService,
+    private readonly notificationService: NotificationService,
   ) {}
 
   @Cron('0 * * * * *')
@@ -29,6 +31,7 @@ export class SchedulerService {
       if (matched) {
         const message = `In ${user.city}: ${weather.weather[0].description}, ${weather.main.temp}°C`;
         await this.mailerService.sendEmail(user.email, 'Weather Alert', message);
+        await this.notificationService.logNotification(user.email, user.city, message);
       }
     }
   }
