@@ -3,6 +3,7 @@ import { SchedulerService } from './scheduler.service';
 import { UsersService } from '../users/users.service';
 import { WeatherService } from '../weather/weather.service';
 import { MailerService } from '../mailer/mailer.service';
+import {NotificationService} from "../notification/notification.service";
 
 describe('SchedulerService', () => {
   let service: SchedulerService;
@@ -22,6 +23,12 @@ describe('SchedulerService', () => {
     sendEmail: jest.fn(),
   };
 
+  const mockNotificationService = {
+    create: jest.fn(),
+    findByEmail: jest.fn(),
+    logNotification: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -29,6 +36,7 @@ describe('SchedulerService', () => {
         { provide: UsersService, useValue: mockUsersService },
         { provide: WeatherService, useValue: mockWeatherService },
         { provide: MailerService, useValue: mockMailerService },
+        { provide: NotificationService, useValue: mockNotificationService }
       ],
     }).compile();
 
